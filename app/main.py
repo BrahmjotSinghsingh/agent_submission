@@ -1,3 +1,5 @@
+import os
+import uvicorn
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -13,7 +15,6 @@ from app.rag.vectorstore import init_vectorstore
 settings = get_settings()
 setup_logging(debug=settings.DEBUG)
 logger = get_logger(__name__)
-
 
 # ─── Startup / Shutdown ───────────────────────────────────────────────────────
 
@@ -37,7 +38,6 @@ async def lifespan(app: FastAPI):
     yield
 
     logger.info("=== SHL RAG Agent shutting down ===")
-
 
 # ─── App ──────────────────────────────────────────────────────────────────────
 
@@ -68,7 +68,6 @@ app.add_middleware(
 
 app.include_router(router)
 
-
 @app.get("/", tags=["Utility"], summary="Root")
 async def root():
     return {
@@ -76,3 +75,10 @@ async def root():
         "version": settings.APP_VERSION,
         "docs": "/docs",
     }
+
+if __name__ == "__main__":
+    # Railway provides the port via an environment variable; default to 8000 for local
+    port = int(os.getenv("PORT", 8000))
+    
+    # Use the string import for uvicorn to allow the reload flag to work in DEBUG mode
+    uvicorn.run("app.main:app", host="0.0.0.0", port=port, reload=settings.DEBUG)
