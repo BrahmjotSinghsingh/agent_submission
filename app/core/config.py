@@ -36,11 +36,6 @@ class Settings(BaseSettings):
     DENSE_WEIGHT: float = 0.65
     BM25_WEIGHT: float = 0.35
 
-    class Config:
-        env_file = ".env"
-        case_sensitive = False
-
-
 # ─── lru_cache-free settings loader ──────────────────────────────────────────
 # Use the v2 style config dict
     model_config = SettingsConfigDict(
