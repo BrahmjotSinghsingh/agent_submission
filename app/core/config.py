@@ -1,14 +1,17 @@
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
-    # App
+# App
     APP_NAME: str = "SHL RAG Agent"
     APP_VERSION: str = "1.0.0"
     DEBUG: bool = False
 
     # LLM
-    GOOGLE_API_KEY: str = ""
-    GEMINI_MODEL: str = "gemini-3.1-flash-lite-preview"
+    # Pydantic will automatically look for an env var named GOOGLE_API_KEY
+    GOOGLE_API_KEY: str  
+    
+    # Update to the GA (stable) model name
+    GEMINI_MODEL: str = "gemini-3.1-flash-lite" 
     LLM_TEMPERATURE: float = 0.0
 
     # Embeddings
@@ -30,8 +33,8 @@ class Settings(BaseSettings):
     FINAL_K: int = 20       # Increased from 10 to 20 to give the LLM more options
     DENSE_K: int = 40
     BM25_K: int = 40
-    DENSE_WEIGHT: float = 0.50 # Lowered from 0.65
-    BM25_WEIGHT: float = 0.50  # Raised from 0.35 to catch exact acronyms better
+    DENSE_WEIGHT: float = 0.65
+    BM25_WEIGHT: float = 0.35
 
     class Config:
         env_file = ".env"
@@ -39,6 +42,12 @@ class Settings(BaseSettings):
 
 
 # ─── lru_cache-free settings loader ──────────────────────────────────────────
+# Use the v2 style config dict
+    model_config = SettingsConfigDict(
+        env_file=".env", 
+        case_sensitive=False, 
+        extra="ignore"
+    )
 
 _settings_instance = None
 
