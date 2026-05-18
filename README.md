@@ -25,3 +25,9 @@ Takes a stateless conversation history and returns the agent's next reply along 
     {"role": "user", "content": "Mid-level, around 4 years"}
   ]
 }
+```
+### 3. Manual Testing (Swagger UI)
+**`GET /docs`**
+Simply navigate to `https://agentsubmission-production.up.railway.app/docs in your browser.`  
+You can easily test the API and simulate conversation turns manually via the built-in Swagger UI. 
+
